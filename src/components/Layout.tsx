@@ -8,8 +8,21 @@ import {
   User, 
   FileText, 
   ChevronLeft, 
-  ChevronRight 
+  ChevronRight,
+  Settings,
+  Bell,
+  Search,
+  LogOut
 } from 'lucide-react';
+import { Badge } from '../components/components/ui/badge';
+import { Input } from '../components/components/ui/input';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger,
+  DropdownMenuSeparator 
+} from '../components/components/ui/dropdown-menu';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -26,29 +39,36 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: Calendar },
-    { path: '/appointments', label: 'Agendamentos', icon: CalendarDays },
-    { path: '/patients', label: 'Pacientes', icon: User },
+    { path: '/dashboard', label: 'Dashboard', icon: Calendar, badge: null },
+    { path: '/appointments', label: 'Agendamentos', icon: CalendarDays, badge: '3' },
+    { path: '/patients', label: 'Pacientes', icon: User, badge: null },
     ...(user?.role === 'admin' ? [
-      { path: '/professionals', label: 'Profissionais', icon: User },
-      { path: '/services', label: 'Serviços', icon: FileText },
+      { path: '/professionals', label: 'Profissionais', icon: User, badge: null },
+      { path: '/services', label: 'Serviços', icon: FileText, badge: null },
     ] : []),
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <div className={`bg-white shadow-lg transition-all duration-300 ${
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
+      {/* Sidebar */}
+      <div className={`bg-white shadow-xl transition-all duration-300 ${
         sidebarCollapsed ? 'w-16' : 'w-64'
-      }`}>
-        <div className="p-4 border-b">
+      } border-r border-gray-200`}>
+        <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             {!sidebarCollapsed && (
-              <h1 className="text-xl font-bold text-blue-600">ClinicTime</h1>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg"></div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                  ClinicTime
+                </h1>
+              </div>
             )}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="hover:bg-gray-100"
             >
               {sidebarCollapsed ? <ChevronRight /> : <ChevronLeft />}
             </Button>
@@ -56,22 +76,29 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         <nav className="p-4">
-          <ul className="space-y-2">
+          <ul className="space-y-1">
             {menuItems.map((item) => (
               <li key={item.path}>
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2 rounded-lg transition-colors ${
+                    `flex items-center justify-between px-3 py-3 rounded-xl transition-all ${
                       isActive
-                        ? 'bg-blue-100 text-blue-600'
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? 'bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-600 shadow-sm border-l-4 border-blue-600'
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     }`
                   }
                 >
-                  <item.icon className="h-5 w-5" />
-                  {!sidebarCollapsed && (
-                    <span className="ml-3">{item.label}</span>
+                  <div className="flex items-center">
+                    <item.icon className="h-5 w-5" />
+                    {!sidebarCollapsed && (
+                      <span className="ml-3 font-medium">{item.label}</span>
+                    )}
+                  </div>
+                  {!sidebarCollapsed && item.badge && (
+                    <Badge variant="secondary" className="bg-red-100 text-red-600">
+                      {item.badge}
+                    </Badge>
                   )}
                 </NavLink>
               </li>
@@ -79,34 +106,107 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </ul>
         </nav>
 
+        {/* User Profile Section */}
         <div className="absolute bottom-4 left-4 right-4">
           {!sidebarCollapsed && (
-            <div className="p-3 bg-gray-100 rounded-lg">
-              <p className="text-sm font-medium">{user?.name}</p>
-              <p className="text-xs text-gray-500">{user?.email}</p>
+            <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center">
+                  <User className="h-5 w-5 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
+                  <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                </div>
+              </div>
             </div>
           )}
           <Button
             variant="outline"
             onClick={handleLogout}
-            className={`w-full mt-2 ${sidebarCollapsed ? 'px-2' : ''}`}
+            className={`w-full mt-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 ${
+              sidebarCollapsed ? 'px-2' : ''
+            }`}
           >
-            {sidebarCollapsed ? '⏻' : 'Sair'}
+            {sidebarCollapsed ? <LogOut className="h-4 w-4" /> : 'Sair'}
           </Button>
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white shadow-sm border-b">
+        {/* Header */}
+        <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="px-6 py-4">
-            <h2 className="text-2xl font-semibold text-gray-800">
-              Bem-vindo ao ClinicTime
-            </h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Bem-vindo ao ClinicTime
+                </h2>
+                <p className="text-gray-600 mt-1">
+                  {new Date().toLocaleDateString('pt-BR', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </p>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                {/* Search */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input 
+                    placeholder="Buscar..." 
+                    className="pl-10 w-64 bg-gray-50 border-gray-200 focus:bg-white"
+                  />
+                </div>
+
+                {/* Notifications */}
+                <Button variant="ghost" size="icon" className="relative">
+                  <Bell className="h-5 w-5" />
+                  <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-red-500">
+                    3
+                  </Badge>
+                </Button>
+
+                {/* User Menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center space-x-2">
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center">
+                        <User className="h-4 w-4 text-white" />
+                      </div>
+                      <span className="font-medium">{user?.name}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem>
+                      <User className="mr-2 h-4 w-4" />
+                      Perfil
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Configurações
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sair
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
           </div>
         </header>
 
-        <main className="flex-1 overflow-auto p-6">
-          {children}
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-auto p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>
