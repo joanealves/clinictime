@@ -41,7 +41,7 @@ const MedicalPrescriptionSystem: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'historico' | 'alergias' | 'nova'>('historico');
   const [searchTerm, setSearchTerm] = useState('');
   
-  const [allergies, setAllergies] = useState<Allergy[]>([
+  const [allergies] = useState<Allergy[]>([
     {
       id: '1',
       substance: 'Penicilina',
@@ -56,7 +56,7 @@ const MedicalPrescriptionSystem: React.FC = () => {
     }
   ]);
 
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>([
+  const [prescriptions] = useState<Prescription[]>([
     {
       id: '1',
       date: '2024-06-10',
@@ -150,7 +150,6 @@ const MedicalPrescriptionSystem: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -169,7 +168,6 @@ const MedicalPrescriptionSystem: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
         <div className="bg-white rounded-lg shadow-sm mb-6">
           <div className="flex border-b">
             <button

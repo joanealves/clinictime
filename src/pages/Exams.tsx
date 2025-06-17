@@ -1,4 +1,3 @@
-// pages/ExamsPage.tsx
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/components/ui/card';
 import { Button } from '../components/components/ui/button';
@@ -10,7 +9,6 @@ import { Badge } from '../components/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/components/ui/dialog';
 import { Calendar, FileText, Plus, Search, Download, Trash2, Edit, User, Stethoscope, AlertTriangle, Clock, MapPin } from 'lucide-react';
 
-// Re-export interfaces if they are used elsewhere and you want them accessible from the page
 export interface Exame {
   id: number;
   pacienteId: number;
@@ -69,10 +67,7 @@ const ExamsPage: React.FC = () => {
   const [filtroPrioridade, setFiltroPrioridade] = useState<PrioridadeExame | 'todos'>('todos');
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  // Load initial data (e.g., from an API or local storage)
   useEffect(() => {
-    // This is a placeholder for fetching data.
-    // In a real application, you'd fetch from an API.
     const initialExames: Exame[] = [
       {
         id: 1,
@@ -190,7 +185,7 @@ const ExamsPage: React.FC = () => {
     if (novoExame.paciente && novoExame.tipo) {
       onAdicionarExame({
         ...novoExame,
-        pacienteId: Date.now() // Simple unique ID for patient, adjust as needed
+        pacienteId: Date.now() 
       });
 
       setNovoExame({
@@ -223,7 +218,7 @@ const ExamsPage: React.FC = () => {
         updates.resultado = {
           data: new Date().toISOString().split('T')[0],
           observacoes: resultado,
-          normal: true, // This could be dynamic based on input
+          normal: true, 
           valores: {},
           medicoLaudante: medicoLaudante || undefined
         };
