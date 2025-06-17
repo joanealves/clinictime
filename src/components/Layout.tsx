@@ -50,7 +50,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
-      {/* Sidebar */}
       <div className={`bg-white shadow-xl transition-all duration-300 ${
         sidebarCollapsed ? 'w-16' : 'w-64'
       } border-r border-gray-200`}>
@@ -105,37 +104,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             ))}
           </ul>
         </nav>
-
-        {/* User Profile Section */}
-        <div className="absolute bottom-4 left-4 right-4">
-          {!sidebarCollapsed && (
-            <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center">
-                  <User className="h-5 w-5 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-                </div>
-              </div>
-            </div>
-          )}
-          <Button
-            variant="outline"
-            onClick={handleLogout}
-            className={`w-full mt-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 ${
-              sidebarCollapsed ? 'px-2' : ''
-            }`}
-          >
-            {sidebarCollapsed ? <LogOut className="h-4 w-4" /> : 'Sair'}
-          </Button>
-        </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
@@ -154,7 +125,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </div>
               
               <div className="flex items-center space-x-4">
-                {/* Search */}
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input 
@@ -163,7 +133,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   />
                 </div>
 
-                {/* Notifications */}
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="h-5 w-5" />
                   <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-red-500">
@@ -171,7 +140,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </Badge>
                 </Button>
 
-                {/* User Menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="flex items-center space-x-2">
@@ -202,7 +170,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </header>
 
-        {/* Main Content Area */}
         <main className="flex-1 overflow-auto p-6 bg-gradient-to-br from-gray-50 to-gray-100">
           <div className="max-w-7xl mx-auto">
             {children}
